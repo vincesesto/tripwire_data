@@ -1,0 +1,65 @@
+<dashboard>
+  <label>TripWireData Overview</label>
+  <description>Tripwire data collected daily on your system. Refer to the following link for some further information: https://github.com/vincesesto/tripwire_data/blob/master/triplog.sh</description>
+  <row>
+    <panel>
+      <title>Total Daily Violations</title>
+      <chart>
+        <search>
+          <query>sourcetype="TripWireData" | rex field=_raw "Totalviolationsfound: (?&lt;Totalviolationsfound&gt;.*)"
+| search Totalviolationsfound
+| timechart values(Totalviolationsfound)</query>
+          <earliest>0</earliest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="charting.axisLabelsX.majorLabelStyle.overflowMode">ellipsisNone</option>
+        <option name="charting.axisLabelsX.majorLabelStyle.rotation">0</option>
+        <option name="charting.axisTitleX.visibility">visible</option>
+        <option name="charting.axisTitleY.visibility">visible</option>
+        <option name="charting.axisTitleY2.visibility">visible</option>
+        <option name="charting.axisX.scale">linear</option>
+        <option name="charting.axisY.scale">linear</option>
+        <option name="charting.axisY2.enabled">0</option>
+        <option name="charting.axisY2.scale">inherit</option>
+        <option name="charting.chart">area</option>
+        <option name="charting.chart.bubbleMaximumSize">50</option>
+        <option name="charting.chart.bubbleMinimumSize">10</option>
+        <option name="charting.chart.bubbleSizeBy">area</option>
+        <option name="charting.chart.nullValueMode">zero</option>
+        <option name="charting.chart.showDataLabels">none</option>
+        <option name="charting.chart.sliceCollapsingThreshold">0.01</option>
+        <option name="charting.chart.stackMode">default</option>
+        <option name="charting.chart.style">shiny</option>
+        <option name="charting.drilldown">all</option>
+        <option name="charting.layout.splitSeries">0</option>
+        <option name="charting.layout.splitSeries.allowIndependentYRanges">0</option>
+        <option name="charting.legend.labelStyle.overflowMode">ellipsisMiddle</option>
+        <option name="charting.legend.placement">right</option>
+      </chart>
+    </panel>
+    <panel>
+      <title>Modified amd Removed Files by RuleName</title>
+      <chart>
+        <search>
+          <query>sourcetype="tripwiredata" | search Removed
+| stats values(Modified) values(Removed) by RuleName</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+        <option name="charting.chart">column</option>
+      </chart>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <table>
+        <title>Removed Files Greater than Zero</title>
+        <search>
+          <query>sourcetype="tripwiredata" | search Removed &gt; 0</query>
+          <earliest>0</earliest>
+          <latest></latest>
+        </search>
+      </table>
+    </panel>
+  </row>
+</dashboard>
